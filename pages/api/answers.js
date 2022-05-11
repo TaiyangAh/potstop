@@ -11,7 +11,6 @@ const markdown = new MarkdownIt()
 const answers = [
   `That's fantastic work for a beginner! [Arteza](#) have great sculpting tools that you may want to check out!`,
   `From the looks of the clay, it could be a touch dry. 
-  
   Maybe consider a _slight_ bit more water on your hands while you shape and you may find that a little easier.`,
   `I disagree with reply #3, I think the clay looks fine, no more water needed. `
 ].map(a => markdown.render(a))
