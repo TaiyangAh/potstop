@@ -8,7 +8,7 @@ const Account = function ({ accounts, connect, isLoggedIn }) {
   // that when its clicked, will prompt us to login
   // and store the info on the page
   if (isLoggedIn) {
-    return <span>{accounts[0]}</span>;
+    return <EthName address={accounts[0]} />;
   } else {
     return <button onClick={connect}>Connect</button>;
   }
