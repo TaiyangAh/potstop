@@ -22,10 +22,34 @@ export default function Home() {
   // 4. make the user name look good
   // 5. let the user post their own reply
 
-  let account;
+  const [accounts, setAccounts] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const connect = async function () {
-    account = await window.ethereum.request({ method: "eth_requestAccounts" });
+    let a = await window.ethereum.request({ method: "eth_requestAccounts" });
+    setAccounts(a);
   };
+  //useEffect => run some codes on sth is changed
+  useEffect(
+    function () {
+      if (accounts.length > 0) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    },
+    [accounts]
+  );
+  /* 依赖项[]为空，useEffect只会在加载页面时运行一次.
+  实现刷新页面保持连接状态 */
+  useEffect(async function () {
+    let a = await window.ethereum.request({ method: "eth_accounts" });
+    setAccounts(a);
+
+    window.ethereum.on("accountsChanged", function (a) {
+      setAccounts(a);
+    });
+  }, []);
 
   return (
     <main>
@@ -36,7 +60,11 @@ export default function Home() {
           <input type="text" placeholder="Search" />
         </form>
 
-        <Account account={account} connect={connect} />
+        <Account
+          accounts={accounts}
+          connect={connect}
+          isLoggedIn={isLoggedIn}
+        />
       </header>
 
       <section className="question">
