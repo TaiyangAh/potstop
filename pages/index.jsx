@@ -24,6 +24,8 @@ export default function Home() {
 
   const [accounts, setAccounts] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [answers, setAnswers] = useState([]);
 
   const connect = async function () {
     let a = await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -41,7 +43,7 @@ export default function Home() {
     [accounts]
   );
   /* 依赖项[]为空，useEffect只会在加载页面时运行一次.
-  实现刷新页面保持连接状态 */
+  实现刷新页面保持连接状态、监听账号更改、加载数据等功能 */
   useEffect(async function () {
     let a = await window.ethereum.request({ method: "eth_accounts" });
     setAccounts(a);
@@ -49,6 +51,12 @@ export default function Home() {
     window.ethereum.on("accountsChanged", function (a) {
       setAccounts(a);
     });
+
+    fetch("/api/answers")
+      .then((response) => response.json())
+      .then((data) => {
+        setAnswers(data.answers);
+      });
   }, []);
 
   return (
@@ -103,6 +111,7 @@ export default function Home() {
       </section>
 
       <section className="answers">
+        {answers.length}
         <div className="loading">Loading answers...</div>
       </section>
 
